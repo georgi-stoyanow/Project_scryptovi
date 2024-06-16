@@ -1,11 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block content %}
+<style>
+    .btn-update {
+        background-color: limegreen;
+        border-color: rgb(0, 0, 0);
+        border-width: 2px;
+        color: white;
+    }
+    .btn-delete {
+        background-color: rgb(177, 18, 18);
+        border-color: rgb(0, 0, 0);
+        border-width: 2px;
+        color: white;
+    }
+</style>
+<h1 align="center">Notes</h1>
+<ul class="list-group list-group-flush" id="notes">
+  {% for note in user.notes %}
+  <li class="list-group-item">
+    <form method="POST" action="/">
+      <input type="hidden" name="_method" value="PATCH">
+      <input type="hidden" name="note_id" value="{{ note.id }}">
+      <input type="text" name="note" value="{{ note.data }}" class="form-control">
+      <button type="submit" class="btn btn-update" >Update</button>
+      <form method="POST" action="/" onsubmit="return confirm('Are you sure you want to delete this note?');">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="note_id" value="{{ note.id }}">
+        <button type="submit" class="btn btn-delete">Delete</button>
+      </form>
+    </form>
     
-</body>
-</html>
+  </li>
+  {% endfor %}
+</ul>
+<form method="POST" action="/">
+  <textarea name="note" id="note" class="form-control"></textarea>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Note</button>
+  </div>
+</form>
+{% endblock %}
+
